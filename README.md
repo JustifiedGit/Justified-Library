@@ -8,7 +8,8 @@ jlib.theme.accent`
 
 **Frame**
 
-`jlib.theme.frame_header_color
+```lua
+jlib.theme.frame_header_color
 
 jlib.theme.frame_base_color
 
@@ -22,7 +23,8 @@ jlib.theme.frame_close_icon_color
 
 jlib.theme.frame_title_color
 
-jlib.theme.frame_title_secondarycolor`
+jlib.theme.frame_title_secondarycolor
+```
 
 **Text Color**
 
