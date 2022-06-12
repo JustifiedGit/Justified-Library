@@ -126,6 +126,7 @@ do
             self.selected = s:GetText()
             self.selectedid = s.id
             self:OnClick()
+            print("set", s.id)
         end
 
         option:SetFontScale(option:GetTall() * 0.8)
