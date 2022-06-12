@@ -82,3 +82,9 @@ ply:jlib_message(color_red, "[JUSTIFIED] ", color_white, " Test")
 jlib.broadcast(color_red, "[JUSTIFIED] ", color_white, " Test")
 ```
 
+## VGUI
+```lua
+vgui.Register("jlib.Frame", PANEL, "EditablePanel")
+```
+
+
