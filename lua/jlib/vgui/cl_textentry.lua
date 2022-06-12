@@ -22,7 +22,7 @@ do
     end
 
     function PANEL:Paint(w, h)
-        draw.RoundedBox(self.rounding, 0, 0, w, h, jlib.theme.textentry_base_color)
+        draw.RoundedBox(self.rounding, 0, 0, w, h, self.bg_color or jlib.theme.textentry_base_color)
 
         if self.invoke_error_text and self.invoke_time > CurTime() then
             draw.RoundedBox(self.rounding, 0, h - 2, w, 2, jlib.theme.error)
