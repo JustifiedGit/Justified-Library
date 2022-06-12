@@ -23,11 +23,11 @@ do
         self.AnimAlpha = self:IsHovered() and Lerp(FrameTime() * 16, self.AnimAlpha, 255) or not self:IsHovered() and Lerp(FrameTime() * 16, self.AnimAlpha, 0)
         draw.RoundedBox(self.rounding, 0, 0, w, h, jlib.theme.button_base_color)
         draw.RoundedBox(self.rounding, 0, 0, w, h, ColorAlpha(jlib.theme.button_hover_color, self.AnimAlpha))
-        jlib.utils:ClickingAnimationHandle(self, math.max(w, h), jlib.theme.button_click_color)
+        jlib.utils.ClickingAnimationHandle(self, math.max(w, h), jlib.theme.button_click_color)
     end
 
     function PANEL:Think()
-        jlib.utils:InteractSound(self:IsHovered(), self)
+        jlib.utils.InteractSound(self:IsHovered(), self)
     end
 
     function PANEL:SetFontScale(scale)
@@ -35,7 +35,7 @@ do
     end
 
     function PANEL:DoClick()
-        jlib.utils:DoClickAnimation(self, 1)
+        jlib.utils.DoClickAnimation(self, 1)
 
         if self.OnClick then
             self.OnClick(self)

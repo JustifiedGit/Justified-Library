@@ -20,7 +20,7 @@ do
 
         self.header.Think = function(s)
             if self.movable then
-                jlib.utils:PerformDrag(self, s)
+                jlib.utils.PerformDrag(self, s)
             end
         end
 

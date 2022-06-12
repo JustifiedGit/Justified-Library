@@ -80,7 +80,7 @@ do
             return
         end
 
-        jlib.utils:ClickingAnimationHandle(self, math_max(w, h), jlib.theme.combobox_click_color)
+        jlib.utils.ClickingAnimationHandle(self, math_max(w, h), jlib.theme.combobox_click_color)
         draw_SimpleText(self.selected and self.selected or self:GetPlaceholder() or "", jlib.fonts.CreateFont(h * 0.8, jlib.theme.font, 500), h / 2, h / 2, gray, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
         surface_SetDrawColor(gray)
         surface_SetMaterial(jlib.materials.Material("combo_down"))

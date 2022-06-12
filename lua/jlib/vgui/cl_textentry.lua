@@ -36,7 +36,7 @@ do
             return
         end
 
-        jlib.utils:ClickingAnimationHandle(self, math.max(w, h), jlib.theme.textentry_cursor_color)
+        jlib.utils.ClickingAnimationHandle(self, math.max(w, h), jlib.theme.textentry_cursor_color)
         self:DrawTextEntryText(jlib.theme.textentry_text_color, jlib.theme.textentry_cursor_color, jlib.theme.textentry_text_color)
         local placeholder = self:GetPlaceholderText()
 
@@ -55,7 +55,7 @@ do
 
     function PANEL:OnFocusChanged(state)
         if state then
-            jlib.utils:DoClickAnimation(self, 0.3)
+            jlib.utils.DoClickAnimation(self, 0.3)
         end
     end
 
