@@ -9,12 +9,19 @@ jlib.theme.accent`
 **Frame**
 
 `jlib.theme.frame_header_color
+
 jlib.theme.frame_base_color
+
 jlib.theme.frame_secondary_color
+
 jlib.theme.frame_content_color
+
 jlib.theme.frame_close_color
+
 jlib.theme.frame_close_icon_color
+
 jlib.theme.frame_title_color
+
 jlib.theme.frame_title_secondarycolor`
 
 **Text Color**
