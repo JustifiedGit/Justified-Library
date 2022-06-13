@@ -1,3 +1,4 @@
+local surface_PlaySound = surface.PlaySound
 local FrameTime = FrameTime
 local cam_Start3D2D = cam.Start3D2D
 local surface_SetDrawColor = surface.SetDrawColor
@@ -154,6 +155,10 @@ function UTILS.InteractSound(hover, pnl)
     end
 end
 
+function UTILS.Click()
+    surface_PlaySound("jlib/click4.wav")
+end
+
 local xoffset = -15
 local hoffset = 85
 local iconSize = 64
@@ -181,6 +186,10 @@ function UTILS.DrawNPCData(ent, text, icon, extra)
     end
 
     cam_End3D2D()
+end
+
+function UTILS.InRange(value, min, max)
+    return value > min and value < max
 end
 
 hook_Add("OnScreenSizeChanged", "jlib.utils.updateScreenResolution", function(oldWidth, oldHeight)
