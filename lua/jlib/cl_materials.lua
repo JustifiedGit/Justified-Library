@@ -68,7 +68,15 @@ local function clearResources()
     end
 end
 
-hook.Add("Initialize", "jlib.Materials.Stub", requestResources)
+hook.Add("InitPostEntity", "jlib.Materials.Stub", 
+	function ()
+		timer.Simple (0,
+			function ()
+				requestResources ()
+			end
+		)
+	end
+)
 
 concommand.Add("jlib_reloadresources", function()
     requestResources()
