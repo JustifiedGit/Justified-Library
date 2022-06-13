@@ -8,7 +8,7 @@ local surface_CreateFont = CLIENT and surface.CreateFont
 local surface_SetFont = CLIENT and surface.SetFont
 local surface_GetTextSize = CLIENT and surface.GetTextSize
 
-function self.CreateFont(fS, fF, fW)
+function self.Font(fS, fF, fW)
     fW = fW or 500
     local id = "jlib." .. fS .. fF .. fW
     if self.Index[id] then return id end
