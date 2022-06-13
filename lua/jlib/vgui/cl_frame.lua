@@ -20,14 +20,14 @@ do
 
         self.header.Think = function(s)
             if self.movable then
-                jlib.utils:PerformDrag(self, s)
+                jlib.utils.PerformDrag(self, s)
             end
         end
 
         self.header.title = vgui.Create("DLabel", self.header)
         self.header.title:Dock(LEFT)
         self.header.title:DockMargin(self.rounding + ScreenScale(1), 0, 0, 0)
-        self.header.title:SetFont(jlib.fonts.CreateFont(self.header:GetTall() * 0.8, jlib.theme.font, 200))
+        self.header.title:SetFont(jlib.fonts.Font(self.header:GetTall() * 0.8, jlib.theme.font, 200))
         self.header.title:SetTextColor(jlib.theme.frame_title_color)
         self.header.title:SetText("JLIB Frame")
         self.header.title:SizeToContents()
@@ -35,7 +35,7 @@ do
         self.header.closeBtn = vgui.Create("DButton", self.header)
         self.header.closeBtn:Dock(RIGHT)
         self.header.closeBtn:SetWide(self.header:GetTall())
-        self.header.closeBtn:SetFont(jlib.fonts.CreateFont(self.header.closeBtn:GetTall() * 0.8, jlib.theme.font, 200))
+        self.header.closeBtn:SetFont(jlib.fonts.Font(self.header.closeBtn:GetTall() * 0.8, jlib.theme.font, 200))
         self.header.closeBtn:SetText("")
         self.header.closeBtn:SetTextColor(jlib.theme.frame_close_icon_color)
 

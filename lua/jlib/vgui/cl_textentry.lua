@@ -22,7 +22,7 @@ do
     end
 
     function PANEL:Paint(w, h)
-        draw.RoundedBox(self.rounding, 0, 0, w, h, self.bg_color or jlib.theme.textentry_base_color)
+        draw.RoundedBox(self.rounding, 0, 0, w, h, jlib.theme.textentry_base_color)
 
         if self.invoke_error_text and self.invoke_time > CurTime() then
             draw.RoundedBox(self.rounding, 0, h - 2, w, 2, jlib.theme.error)
@@ -36,7 +36,7 @@ do
             return
         end
 
-        jlib.utils:ClickingAnimationHandle(self, math.max(w, h), jlib.theme.textentry_cursor_color)
+        jlib.utils.ClickingAnimationHandle(self, math.max(w, h), jlib.theme.textentry_cursor_color)
         self:DrawTextEntryText(jlib.theme.textentry_text_color, jlib.theme.textentry_cursor_color, jlib.theme.textentry_text_color)
         local placeholder = self:GetPlaceholderText()
 
@@ -50,12 +50,12 @@ do
     end
 
     function PANEL:SetFontScale(scale)
-        self:SetFont(jlib.fonts.CreateFont(scale, jlib.theme.font, 200))
+        self:SetFont(jlib.fonts.Font(scale, jlib.theme.font, 200))
     end
 
     function PANEL:OnFocusChanged(state)
         if state then
-            jlib.utils:DoClickAnimation(self, 0.3)
+            jlib.utils.DoClickAnimation(self, 0.3)
         end
     end
 

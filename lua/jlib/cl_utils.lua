@@ -17,8 +17,6 @@ local surface_DrawPoly = surface.DrawPoly
 local ipairs = ipairs
 local math_Clamp = math.Clamp
 local CurTime = CurTime
-local draw_NoTexture = draw.NoTexture
-local surface_SetDrawColor = surface.SetDrawColor
 local ColorAlpha = ColorAlpha
 local table_remove = table.remove
 local input_IsMouseDown = input.IsMouseDown
@@ -29,10 +27,10 @@ local sound_Play = sound.Play
 local LocalPlayer = LocalPlayer
 local math_random = math.random
 local hook_Add = hook.Add
-local self = {}
-self.CircleCache = {}
+local UTILS = {}
+UTILS.CircleCache = {}
 
-function self:PLerp(rate, from, to)
+function UTILS.PLerp(rate, from, to)
     if from / to > 0.998 then
         return to
     else
@@ -40,14 +38,14 @@ function self:PLerp(rate, from, to)
     end
 end
 
-function self:LerpColor(rate, colfrom, colto)
+function UTILS.LerpColor(rate, colfrom, colto)
     local newcolor = LerpVector(rate, Vector(colfrom.r, colfrom.g, colfrom.b), Vector(colto.r, colto.g, colto.b))
 
     return Color(newcolor[1], newcolor[2], newcolor[3])
 end
 
 -- Thanks Wiremod.
-function self:AdvanceColor(rv1, rv2, rv3)
+function UTILS.AdvanceColor(rv1, rv2, rv3)
     rv1 = Vector(rv1.r, rv1.g, rv1.b)
     rv2 = Vector(rv2.r, rv2.g, rv2.b)
     local p = rv1[1] * rv3 + rv2[1] * (1 - rv3)
@@ -57,7 +55,7 @@ function self:AdvanceColor(rv1, rv2, rv3)
     return Color(p, y, r)
 end
 
-function self:Circle(x, y, r)
+function UTILS.Circle(x, y, r)
     local circle = {}
 
     for i = 1, 360 do
@@ -69,7 +67,7 @@ function self:Circle(x, y, r)
     surface_DrawPoly(circle)
 end
 
-function self:ClickingAnimationHandle(me, size, accent)
+function UTILS.ClickingAnimationHandle(me, size, accent)
     size = size * 2
     me.ClickingAnimationTable = me.ClickingAnimationTable or {}
 
@@ -77,7 +75,7 @@ function self:ClickingAnimationHandle(me, size, accent)
         local progress = 1 - math_Clamp(data.creation + data.duration - CurTime(), 0, 1)
         draw_NoTexture()
         surface_SetDrawColor(ColorAlpha(accent, math_Clamp(255 - progress / 1 * 255, 0, 100)))
-        self:Circle(data.x, data.y, progress / 1 * size, 20)
+        UTILS.Circle(data.x, data.y, progress / 1 * size, 20)
 
         if CurTime() >= data.creation + data.duration then
             table_remove(me.ClickingAnimationTable, id)
@@ -85,7 +83,7 @@ function self:ClickingAnimationHandle(me, size, accent)
     end
 end
 
-function self:DoClickAnimation(me, duration)
+function UTILS.DoClickAnimation(me, duration)
     if me.ClickingAnimationTable == nil then return end
     local x, y = me:CursorPos()
 
@@ -97,7 +95,7 @@ function self:DoClickAnimation(me, duration)
     }
 end
 
-function self:PerformDrag(s, me)
+function UTILS.PerformDrag(s, me)
     if s.hovering == nil then
         s.hovering = false
     end
@@ -125,23 +123,23 @@ function self:PerformDrag(s, me)
     end
 end
 
-function self.ScaleW(amt)
-    if not self.maxWidth then
-        self.maxWidth = ScrW()
+function UTILS.ScaleW(amt)
+    if not UTILS.maxWidth then
+        UTILS.maxWidth = ScrW()
     end
 
-    return math_Clamp(amt * self.maxWidth / 640.0, 0, self.maxWidth)
+    return math_Clamp(amt * UTILS.maxWidth / 640.0, 0, UTILS.maxWidth)
 end
 
-function self.ScaleH(amt)
-    if not self.maxHeight then
-        self.maxHeight = ScrH()
+function UTILS.ScaleH(amt)
+    if not UTILS.maxHeight then
+        UTILS.maxHeight = ScrH()
     end
 
-    return math_Clamp(amt * self.maxHeight / 340.0, 0, self.maxHeight)
+    return math_Clamp(amt * UTILS.maxHeight / 340.0, 0, UTILS.maxHeight)
 end
 
-function self:InteractSound(hover, pnl)
+function UTILS.InteractSound(hover, pnl)
     if not pnl._JLIB_HELD then
         pnl._JLIB_HELD = false
     end
@@ -161,22 +159,22 @@ local hoffset = 85
 local iconSize = 64
 local unload_distance = 50000
 
-function self.DrawNPCData(ent, text, icon, extra)
+function UTILS.DrawNPCData(ent, text, icon, extra)
     ent.alphaAnim = ent.alphaAnim or 0
     ent.alphaAnim = Lerp(FrameTime() * 15, ent.alphaAnim, LocalPlayer():GetPos():DistToSqr(ent:GetPos()) > unload_distance and 0 or 255)
     if ent.alphaAnim < 1 then return end
     local ang = ent:GetAngles()
     ang:RotateAroundAxis(ang:Right(), -90)
     ang:RotateAroundAxis(ang:Up(), 90)
-    cam_Start3D2D(ent:GetPos() + ent:GetAngles():Up() * (hoffset + 3 - (ent.alphaAnim / 255) * 3), ang, .1)
-    local font = jlib.fonts.CreateFont(80, jlib.theme.font)
+    cam_Start3D2D(ent:GetPos() + ent:GetAngles():Up() * (hoffset + 3 - ent.alphaAnim / 255 * 3), ang, .1)
+    local font = jlib.fonts.Font(80, jlib.theme.font)
     local size_w, size_h = jlib.fonts.FontSurface(text, font)
     surface_SetDrawColor(ColorAlpha(jlib.theme.frame_secondary_color, ent.alphaAnim))
     draw_NoTexture()
-    draw_SimpleText(text, font, xoffset + (-size_w / 2 + 42), 0, ColorAlpha(jlib.theme.text_color, ent.alphaAnim), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+    draw_SimpleText(text, font, xoffset + -size_w / 2 + 42, 0, ColorAlpha(jlib.theme.text_color, ent.alphaAnim), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
     surface_SetDrawColor(ColorAlpha(jlib.theme.text_color, ent.alphaAnim))
     surface_SetMaterial(jlib.materials.Material(icon))
-    surface_DrawTexturedRectRotated(xoffset + (-size_w / 2), size_h / 2 - 3, iconSize, iconSize, 0)
+    surface_DrawTexturedRectRotated(xoffset + -size_w / 2, size_h / 2 - 3, iconSize, iconSize, 0)
 
     if extra then
         extra(size_w, size_h, xoffset, ent.alphaAnim)
@@ -186,8 +184,8 @@ function self.DrawNPCData(ent, text, icon, extra)
 end
 
 hook_Add("OnScreenSizeChanged", "jlib.utils.updateScreenResolution", function(oldWidth, oldHeight)
-    self.maxWidth = ScrW()
-    self.maxHeight = ScrH()
+    UTILS.maxWidth = ScrW()
+    UTILS.maxHeight = ScrH()
 end)
 
-jlib.utils = self
+jlib.utils = UTILS

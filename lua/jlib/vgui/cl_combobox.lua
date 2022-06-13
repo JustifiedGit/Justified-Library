@@ -75,13 +75,13 @@ do
 
         if self.invoke_error_text and self.invoke_time > CurTime() then
             draw.RoundedBox(self.rounding, 0, h - 2, w, 2, jlib.theme.error)
-            draw_SimpleText(self.invoke_error_text, jlib.fonts.CreateFont(h * 0.8, jlib.theme.font, 500), h / 2, h / 2, gray, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            draw_SimpleText(self.invoke_error_text, jlib.fonts.Font(h * 0.8, jlib.theme.font, 500), h / 2, h / 2, gray, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
             return
         end
 
-        jlib.utils:ClickingAnimationHandle(self, math_max(w, h), jlib.theme.combobox_click_color)
-        draw_SimpleText(self.selected and self.selected or self:GetPlaceholder() or "", jlib.fonts.CreateFont(h * 0.8, jlib.theme.font, 500), h / 2, h / 2, gray, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        jlib.utils.ClickingAnimationHandle(self, math_max(w, h), jlib.theme.combobox_click_color)
+        draw_SimpleText(self.selected and self.selected or self:GetPlaceholder() or "", jlib.fonts.Font(h * 0.8, jlib.theme.font, 500), h / 2, h / 2, gray, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
         surface_SetDrawColor(gray)
         surface_SetMaterial(jlib.materials.Material("combo_down"))
         surface_DrawTexturedRectRotated(w - h / 2, h / 2, h * 0.8, h * 0.8, self.rotanim)
@@ -99,7 +99,7 @@ do
     end
 
     function PANEL:SetFontScale(scale)
-        self:SetFont(jlib.fonts.CreateFont(scale, jlib.theme.font, 500))
+        self:SetFont(jlib.fonts.Font(scale, jlib.theme.font, 500))
     end
 
     function PANEL:OnSelect(index, value)
@@ -126,7 +126,6 @@ do
             self.selected = s:GetText()
             self.selectedid = s.id
             self:OnClick()
-            print("set", s.id)
         end
 
         option:SetFontScale(option:GetTall() * 0.8)
