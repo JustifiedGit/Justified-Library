@@ -24,9 +24,7 @@ local input_IsMouseDown = input.IsMouseDown
 local input_GetCursorPos = input.GetCursorPos
 local ScrW = ScrW
 local ScrH = ScrH
-local sound_Play = sound.Play
 local LocalPlayer = LocalPlayer
-local math_random = math.random
 local hook_Add = hook.Add
 local UTILS = {}
 UTILS.CircleCache = {}
@@ -146,7 +144,7 @@ function UTILS.InteractSound(hover, pnl)
     end
 
     if hover and not pnl._JLIB_HELD then
-        sound_Play("jlib/hover.wav", LocalPlayer():GetPos(), 75, math_random(130, 145), 1)
+        --sound_Play("jlib/hover.wav", LocalPlayer():GetPos(), 75, math_random(130, 145), 1)
         pnl._JLIB_HELD = true
     end
 
