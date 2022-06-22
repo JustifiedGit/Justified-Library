@@ -7,12 +7,14 @@ do
     local PANEL = {}
 
     function PANEL:Init()
+        self.create_time = CurTime()
         self:SetAlpha(0)
         self.rounding = ScreenScale(1)
         self.movable = true
         self.header = vgui.Create("jlib.Panel", self)
         self.header:Dock(TOP)
         self.header:SetTall(jlib.utils.ScaleH(8))
+        self.draw_blur = false
 
         self.header.Paint = function(s, w, h)
             draw.RoundedBoxEx(self.rounding, 0, 0, w, h, jlib.theme.frame_header_color, true, true, false, false)
@@ -88,6 +90,10 @@ do
     end
 
     function PANEL:Paint(w, h)
+        if self.draw_blur then
+            Derma_DrawBackgroundBlur(self, self.create_time)
+        end
+
         local x, y = jlib.shadows.offsetLocation(self)
         jlib.shadows.BeginShadow()
         draw.RoundedBox(self.rounding, x, y, w, h, jlib.theme.frame_base_color)
