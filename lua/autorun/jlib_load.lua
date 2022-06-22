@@ -4,7 +4,7 @@
 
     Special Thanks to:
     BullyHunter, Blue
-]]
+    ]]
 jlib = jlib or {}
 local MsgC = MsgC
 local Color = Color
@@ -14,7 +14,13 @@ local ipairs = ipairs
 local string_find = string.find
 local include = include
 local AddCSLuaFile = AddCSLuaFile
-local startTime
+local string_EndsWith = string.EndsWith
+local table_insert = table.insert
+local type = type
+local string_match = string.match
+local string_GetExtensionFromFilename = string.GetExtensionFromFilename
+local resource_AddFile = SERVER and resource.AddFile
+local concommand_Add = concommand.Add
 
 function jlib.msg(...)
     MsgC(Color(0, 255, 234), "[/Justified Library/] ", Color(235, 235, 235), unpack({...}), "\n")
@@ -31,29 +37,29 @@ jlib.content_extentions = {
 
 function jlib.search(dir, instance, filetype)
     local totalfiles = {}
-    local files, directories = file.Find(dir .. "/*", instance)
+    local files, directories = file_Find(dir .. "/*", instance)
 
-    for each, f in ipairs(files) do
+    for _, f in ipairs(files) do
         local path = dir .. "/" .. f
 
         if filetype then
-            if string.EndsWith(f, filetype) then
-                table.insert(totalfiles, path)
+            if string_EndsWith(f, filetype) then
+                table_insert(totalfiles, path)
                 continue
             else
                 continue
             end
         end
 
-        table.insert(totalfiles, path)
+        table_insert(totalfiles, path)
     end
 
-    for each, d in ipairs(directories) do
+    for _, d in ipairs(directories) do
         local fs = jlib.search(dir .. "/" .. d, instance, filetype)
 
         if fs and type(fs) == "table" then
             for _, f in ipairs(fs) do
-                table.insert(totalfiles, f)
+                table_insert(totalfiles, f)
             end
         end
     end
@@ -62,20 +68,20 @@ function jlib.search(dir, instance, filetype)
 end
 
 function jlib.import_content(dir)
-    if string.match(dir, "/entities") then return end
-    local files, directories = file.Find(dir .. "/*", "GAME")
+    if string_match(dir, "/entities") then return end
+    local files, directories = file_Find(dir .. "/*", "GAME")
 
-    for each, file in ipairs(files) do
+    for _, content in ipairs(files) do
         local f_ = dir .. "/" .. file
-        local extention = string.GetExtensionFromFilename(file)
+        local extention = string_GetExtensionFromFilename(content)
 
         if f_ and jlib.content_extentions[extention] then
             jlib.msg("Adding Content '" .. f_ .. "'")
-            resource.AddFile(f_)
+            resource_AddFile(f_)
         end
     end
 
-    for each, d in ipairs(directories) do
+    for _, d in ipairs(directories) do
         jlib.import_content(dir .. "/" .. d)
     end
 end
@@ -83,17 +89,17 @@ end
 function jlib.load_dir(dir)
     local files, directories = file_Find(dir .. "/*", "LUA")
 
-    for each, file in ipairs(files) do
-        local f_ = dir .. "/" .. file
+    for _, f in ipairs(files) do
+        local f_ = dir .. "/" .. f
 
-        if string_find(file, "sv_") or string_find(file, "sh_") then
+        if string_find(f, "sv_") or string_find(f, "sh_") then
             jlib.msg("Running [SV] '" .. f_ .. "'")
             include(f_)
         end
 
-        local sh = string_find(file, "sh_")
+        local sh = string_find(f, "sh_")
 
-        if string_find(file, "cl_") or sh then
+        if string_find(f, "cl_") or sh then
             if CLIENT then
                 jlib.msg("Running [" .. (sh and "SH" or "CL") .. "] '" .. f_ .. "'")
                 include(f_)
@@ -120,7 +126,7 @@ end
 
 init()
 
-concommand.Add("jlib_reload", function(ply)
+concommand_Add("jlib_reload", function(ply)
     if ply and type(ply) == "Player" and not ply:IsSuperAdmin() then return end
     init()
 end)
