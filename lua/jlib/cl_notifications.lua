@@ -5,8 +5,6 @@
 local net_Receive = net.Receive
 local net_ReadTable = net.ReadTable
 local unpack = unpack
-local ipairs = ipairs
-local type = type
 
 net_Receive("jlib.notifications", function()
     local tab = net_ReadTable()

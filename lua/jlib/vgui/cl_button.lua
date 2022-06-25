@@ -14,7 +14,12 @@ do
         self:SetFontScale(16)
         self.AnimAlpha = 0
         self.EnableHoverSfx = true
+        self.Icon_Size = 5
         self:SetTextColor(jlib.theme.button_text_color)
+    end
+
+    function PANEL:SetIcon(icon)
+        self.IconName = icon
     end
 
     function PANEL:Paint(w, h)
@@ -24,6 +29,13 @@ do
         draw.RoundedBox(self.rounding, 0, 0, w, h, jlib.theme.button_base_color)
         draw.RoundedBox(self.rounding, 0, 0, w, h, ColorAlpha(jlib.theme.button_hover_color, self.AnimAlpha))
         jlib.utils.ClickingAnimationHandle(self, math.max(w, h), jlib.theme.button_click_color)
+
+        if self.IconName then
+            local tWidth, tHeight = jlib.fonts.FontSurface(self:GetText(), self:GetFont())
+            surface.SetDrawColor(self:GetTextColor())
+            surface.SetMaterial(jlib.materials.Material(self.IconName))
+            surface.DrawTexturedRectRotated((w / 2) - tWidth / 2 - (self.Icon_Size / 2), h / 2, self.Icon_Size, self.Icon_Size, 0)
+        end
     end
 
     function PANEL:Think()
@@ -32,6 +44,7 @@ do
 
     function PANEL:SetFontScale(scale)
         self:SetFont(jlib.fonts.Font(scale, jlib.theme.font, 200))
+        self.Icon_Size = scale
     end
 
     function PANEL:DoClick()

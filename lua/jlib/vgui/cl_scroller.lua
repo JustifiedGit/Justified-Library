@@ -12,6 +12,7 @@ do
         local sbar = self:GetVBar()
         sbar:SetWide(ScreenScale(3))
         sbar:SetHideButtons(true)
+        self.snappy = false
 
         function sbar:Paint(w, h)
             draw.RoundedBox(w / 2, 0, 0, w, h, jlib.theme.scroller_base_color)
@@ -25,7 +26,7 @@ do
     end
 
     function PANEL:Think()
-        if self.bar.btnGrip:IsHovered() or self.bar:IsHovered() then
+        if (self.bar.btnGrip:IsHovered() or self.bar:IsHovered()) and self.snappy then
             local x, y = self.bar.btnGrip:GetPos()
             local wx, wy = self.bar.btnGrip:LocalToScreen(x, y)
             local _, my = getMousePos()

@@ -1,6 +1,6 @@
 local ScreenScale = ScreenScale
-local draw = draw
-local vgui = vgui
+local draw_RoundedBox = draw.RoundedBox
+local vgui_Register = vgui.Register
 
 do
     local PANEL = {}
@@ -10,7 +10,7 @@ do
     end
 
     function PANEL:Paint(w, h)
-        draw.RoundedBox(self.rounding, 0, 0, w, h, self.bg_color or jlib.theme.frame_content_color)
+        draw_RoundedBox(self.rounding, 0, 0, w, h, self.bg_color or jlib.theme.frame_content_color)
     end
 
     function PANEL:SetBackgroundColor(color)
@@ -21,9 +21,9 @@ do
         self.rounding = amount
     end
 
-    function PANEL:GetRounding(amount)
+    function PANEL:GetRounding()
         return self.rounding
     end
 
-    vgui.Register("jlib.Panel", PANEL, "EditablePanel")
+    vgui_Register("jlib.Panel", PANEL, "EditablePanel")
 end

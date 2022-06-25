@@ -2,27 +2,20 @@
 --  Realm:      Client
 --  Purpose:    Allows creation of materials live using the HTTP lib.
 --  Date:       07/08/2021 - 11:00 AM
-local self = {}
+local MATERIALS = {}
 local Material = Material
 local string = string
 local file = file
 local http = http
-self.CreatedMaterialCache = {}
-self.Downloading = 0
+MATERIALS.CreatedMaterialCache = {}
+MATERIALS.Downloading = 0
 local missing = Material("error")
 
-function self.Material(matName)
-    return matName and self.CreatedMaterialCache[string.lower(matName)] or missing
+function MATERIALS.Material(matName)
+    return matName and MATERIALS.CreatedMaterialCache[string.lower(matName)] or missing
 end
 
-function self.DownloadFinished()
-    if self.Downloading == 0 then
-        print(CurTime() - self.StartTime)
-    end
-end
-
-function self.CreateMaterial(matName, addOn, matUrl, matArgs)
-    self.Downloading = self.Downloading + 1
+function MATERIALS.CreateMaterial(matName, addOn, matUrl, matArgs)
     matName = string.lower(matName)
     jlib.msg("[Materials] '" .. addOn .. "' requested Material instance named '" .. matName .. "'")
     local directory = string.format("jlib/%s/", addOn)
@@ -34,9 +27,7 @@ function self.CreateMaterial(matName, addOn, matUrl, matArgs)
 
         if not mmat:IsError() then
             jlib.msg("[Materials] Loaded resource '" .. addOn .. "' from cache.")
-            self.Downloading = self.Downloading - 1
-            self.CreatedMaterialCache[matName] = mmat
-            self.DownloadFinished()
+            MATERIALS.CreatedMaterialCache[matName] = mmat
 
             return
         end
@@ -44,16 +35,13 @@ function self.CreateMaterial(matName, addOn, matUrl, matArgs)
 
     http.Fetch(matUrl, function(b, _, _, _)
         file.Write(filename, b)
-        self.CreatedMaterialCache[matName] = Material("data/" .. filename, "smooth")
+        MATERIALS.CreatedMaterialCache[matName] = Material("data/" .. filename, "smooth")
         jlib.msg("[Materials] Created new WebMaterial Instace '" .. matName .. "'")
-        self.Downloading = self.Downloading - 1
-        self.DownloadFinished()
     end)
 end
 
 local function requestResources()
     timer.Simple(0, function()
-        self.StartTime = CurTime()
         jlib.msg("[Materials] Downloading Server Resources...")
         hook.Call("jlib.downloadResources")
     end)
@@ -68,22 +56,18 @@ local function clearResources()
     end
 end
 
-hook.Add("InitPostEntity", "jlib.Materials.Stub", 
-	function ()
-		timer.Simple (0,
-			function ()
-				requestResources ()
-			end
-		)
-	end
-)
+hook.Add("InitPostEntity", "jlib.Materials.Stub", function()
+    timer.Simple(0, function()
+        requestResources()
+    end)
+end)
 
 concommand.Add("jlib_reloadresources", function()
     requestResources()
 end)
 
 concommand.Add("jlib_clearresources", function()
-    table.Empty(self.CreatedMaterialCache)
+    table.Empty(MATERIALS.CreatedMaterialCache)
     clearResources()
 end)
 
@@ -92,4 +76,4 @@ concommand.Add("jlib_forceredownload", function()
     requestResources()
 end)
 
-jlib.materials = self
+jlib.materials = MATERIALS
