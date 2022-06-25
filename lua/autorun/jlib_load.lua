@@ -51,15 +51,15 @@ function jlib.search( dir, instance, filetype )
             end
         end
 
-        table_insert( totalfiles, path )
+        table.insert(totalfiles, path)
     end
 
-    for _, d in ipairs( directories ) do
-        local fs = jlib.search( dir .. "/" .. d, instance, filetype )
+    for each, d in ipairs(directories) do
+        local fs = jlib.search(dir .. "/" .. d, instance, filetype)
 
-        if fs and type( fs ) == "table" then
-            for _, f in ipairs( fs ) do
-                table_insert( totalfiles, f )
+        if fs and type(fs) == "table" then
+            for _, f in ipairs(fs) do
+                table.insert(totalfiles, f)
             end
         end
     end
@@ -67,39 +67,39 @@ function jlib.search( dir, instance, filetype )
     return totalfiles
 end
 
-function jlib.import_content( dir )
-    if string_match( dir, "/entities" ) then return end
-    local files, directories = file_Find( dir .. "/*", "GAME" )
+function jlib.import_content(dir)
+    if string.match(dir, "/entities") then return end
+    local files, directories = file.Find(dir .. "/*", "GAME")
 
-    for _, content in ipairs( files ) do
-        local f_ = dir .. "/" .. content
-        local extention = string_GetExtensionFromFilename( content )
+    for each, file in ipairs(files) do
+        local f_ = dir .. "/" .. file
+        local extention = string.GetExtensionFromFilename(file)
 
         if f_ and jlib.content_extentions[extention] then
-            jlib.msg( "Adding Content '" .. f_ .. "'" )
-            resource_AddFile( f_ )
+            jlib.msg("Adding Content '" .. f_ .. "'")
+            resource.AddFile(f_)
         end
     end
 
-    for _, d in ipairs( directories ) do
-        jlib.import_content( dir .. "/" .. d )
+    for each, d in ipairs(directories) do
+        jlib.import_content(dir .. "/" .. d)
     end
 end
 
 function jlib.load_dir( dir )
     local files, directories = file_Find( dir .. "/*", "LUA" )
 
-    for _, f in ipairs( files ) do
-        local f_ = dir .. "/" .. f
+    for each, file in ipairs(files) do
+        local f_ = dir .. "/" .. file
 
-        if string_find( f, "sv_" ) or string_find( f, "sh_" ) then
-            jlib.msg( "Running [SV] '" .. f_ .. "'" )
-            include( f_ )
+        if string_find(file, "sv_") or string_find(file, "sh_") then
+            jlib.msg("Running [SV] '" .. f_ .. "'")
+            include(f_)
         end
 
-        local sh = string_find( f, "sh_" )
+        local sh = string_find(file, "sh_")
 
-        if string_find( f, "cl_" ) or sh then
+        if string_find(file, "cl_") or sh then
             if CLIENT then
                 jlib.msg( "Running [" .. ( sh and "SH" or "CL" ) .. "] '" .. f_ .. "'" )
                 include( f_ )
@@ -126,7 +126,7 @@ end
 
 init()
 
-concommand_Add( "jlib_reload", function( ply )
-    if ply and type( ply ) == "Player" and not ply:IsSuperAdmin() then return end
+concommand.Add("jlib_reload", function(ply)
+    if ply and type(ply) == "Player" and not ply:IsSuperAdmin() then return end
     init()
 end )
